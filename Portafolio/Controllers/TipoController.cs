@@ -6,8 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Portafolio.Models;
 
-namespace Portafolio.Models
+namespace Portafolio.Controllers
 {
     public class TipoController : Controller
     {

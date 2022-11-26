@@ -6,115 +6,120 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Portafolio.Models;
 
-namespace Portafolio.Models
+namespace Portafolio.Controllers
 {
-    public class HabilidadController : Controller
+    public class ExperienciasController : Controller
     {
         private portafolioEntities db = new portafolioEntities();
 
-        // GET: Habilidad
+        // GET: Experiencias
         public ActionResult Index()
         {
-            var habilidad = db.Habilidad.Include(h => h.AspNetUsers);
-            return View(habilidad.ToList());
+            var experiencia = db.Experiencia.Include(e => e.AspNetUsers).Include(e => e.Tipo);
+            return View(experiencia.ToList());
         }
 
-        // GET: Habilidad/Details/5
+        // GET: Experiencias/Details/5
         public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Habilidad habilidad = db.Habilidad.Find(id);
-            if (habilidad == null)
+            Experiencia experiencia = db.Experiencia.Find(id);
+            if (experiencia == null)
             {
                 return HttpNotFound();
             }
-            return View(habilidad);
+            return View(experiencia);
         }
 
-        // GET: Habilidad/Create
+        // GET: Experiencias/Create
         public ActionResult Create()
         {
-            ViewBag.UsuarioId = new SelectList(db.AspNetUsers, "Id", "Email");
+            ViewBag.UsuarioID = new SelectList(db.AspNetUsers, "Id", "Email");
+            ViewBag.Tipo_ID = new SelectList(db.Tipo, "Id", "Descripcion");
             return View();
         }
 
-        // POST: Habilidad/Create
+        // POST: Experiencias/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,UsuarioId,Nombre,Dominio")] Habilidad habilidad)
+        public ActionResult Create([Bind(Include = "id,UsuarioID,Tipo_ID,Nombre,Titulo,Desde,Hasta,Descripcion")] Experiencia experiencia)
         {
             if (ModelState.IsValid)
             {
-                db.Habilidad.Add(habilidad);
+                db.Experiencia.Add(experiencia);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UsuarioId = new SelectList(db.AspNetUsers, "Id", "Email", habilidad.UsuarioId);
-            return View(habilidad);
+            ViewBag.UsuarioID = new SelectList(db.AspNetUsers, "Id", "Email", experiencia.UsuarioID);
+            ViewBag.Tipo_ID = new SelectList(db.Tipo, "Id", "Descripcion", experiencia.Tipo_ID);
+            return View(experiencia);
         }
 
-        // GET: Habilidad/Edit/5
+        // GET: Experiencias/Edit/5
         public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Habilidad habilidad = db.Habilidad.Find(id);
-            if (habilidad == null)
+            Experiencia experiencia = db.Experiencia.Find(id);
+            if (experiencia == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UsuarioId = new SelectList(db.AspNetUsers, "Id", "Email", habilidad.UsuarioId);
-            return View(habilidad);
+            ViewBag.UsuarioID = new SelectList(db.AspNetUsers, "Id", "Email", experiencia.UsuarioID);
+            ViewBag.Tipo_ID = new SelectList(db.Tipo, "Id", "Descripcion", experiencia.Tipo_ID);
+            return View(experiencia);
         }
 
-        // POST: Habilidad/Edit/5
+        // POST: Experiencias/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,UsuarioId,Nombre,Dominio")] Habilidad habilidad)
+        public ActionResult Edit([Bind(Include = "id,UsuarioID,Tipo_ID,Nombre,Titulo,Desde,Hasta,Descripcion")] Experiencia experiencia)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(habilidad).State = EntityState.Modified;
+                db.Entry(experiencia).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UsuarioId = new SelectList(db.AspNetUsers, "Id", "Email", habilidad.UsuarioId);
-            return View(habilidad);
+            ViewBag.UsuarioID = new SelectList(db.AspNetUsers, "Id", "Email", experiencia.UsuarioID);
+            ViewBag.Tipo_ID = new SelectList(db.Tipo, "Id", "Descripcion", experiencia.Tipo_ID);
+            return View(experiencia);
         }
 
-        // GET: Habilidad/Delete/5
+        // GET: Experiencias/Delete/5
         public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Habilidad habilidad = db.Habilidad.Find(id);
-            if (habilidad == null)
+            Experiencia experiencia = db.Experiencia.Find(id);
+            if (experiencia == null)
             {
                 return HttpNotFound();
             }
-            return View(habilidad);
+            return View(experiencia);
         }
 
-        // POST: Habilidad/Delete/5
+        // POST: Experiencias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Habilidad habilidad = db.Habilidad.Find(id);
-            db.Habilidad.Remove(habilidad);
+            Experiencia experiencia = db.Experiencia.Find(id);
+            db.Experiencia.Remove(experiencia);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
