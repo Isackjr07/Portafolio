@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="portafolioModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="portafolioModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -64,6 +64,23 @@
           <Property Name="Youtube" Type="varchar" MaxLength="50" />
           <Property Name="Instagram" Type="varchar" MaxLength="50" />
           <Property Name="Photo" Type="varchar" MaxLength="500" />
+          <Property Name="Birthday" Type="varchar" MaxLength="50" />
+          <Property Name="Edad" Type="varchar" MaxLength="50" />
+          <Property Name="Website" Type="varchar" MaxLength="50" />
+          <Property Name="Degree" Type="varchar" MaxLength="50" />
+          <Property Name="Aboutinfo" Type="varchar(max)" />
+          <Property Name="Experiencia_Principal" Type="varchar" MaxLength="50" />
+          <Property Name="Text_Experiencia_principal" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Datos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Clientes" Type="int" />
+          <Property Name="Texto" Type="varchar(max)" />
+          <Property Name="UsuarioId" Type="nvarchar" MaxLength="128" />
+          <Property Name="Descripcion_Hecho" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Experiencia">
           <Key>
@@ -85,7 +102,18 @@
           <Property Name="id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="UsuarioId" Type="nvarchar" MaxLength="128" />
           <Property Name="Nombre" Type="varchar" MaxLength="50" />
-          <Property Name="Dominio" Type="varchar" MaxLength="50" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Porcentaje" Type="int" />
+        </EntityType>
+        <EntityType Name="Servicios">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UsuarioID" Type="nvarchar" MaxLength="128" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="Servicio" Type="varchar" MaxLength="50" />
+          <Property Name="Descripcion_Servicio" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Testimonio">
           <Key>
@@ -105,6 +133,18 @@
           <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Datos_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Datos" Type="Self.Datos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Datos">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -197,6 +237,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Servicios_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Servicios" Type="Self.Servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Servicios">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Testimonio_AspNetUsers">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
           <End Role="Testimonio" Type="Self.Testimonio" Multiplicity="*" />
@@ -215,10 +267,16 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Datos" EntityType="Self.Datos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Experiencia" EntityType="Self.Experiencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Habilidad" EntityType="Self.Habilidad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicios" EntityType="Self.Servicios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Testimonio" EntityType="Self.Testimonio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo" EntityType="Self.Tipo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Datos_AspNetUsers" Association="Self.FK_Datos_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Datos" EntitySet="Datos" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -247,13 +305,16 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Habilidad" EntitySet="Habilidad" />
           </AssociationSet>
+          <AssociationSet Name="FK_Servicios_AspNetUsers" Association="Self.FK_Servicios_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Servicios" EntitySet="Servicios" />
+          </AssociationSet>
           <AssociationSet Name="FK_Testimonio_AspNetUsers" Association="Self.FK_Testimonio_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="Testimonio" EntitySet="Testimonio" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="portafolioModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -317,6 +378,15 @@
           <NavigationProperty Name="Habilidad" Relationship="Self.FK_Habilidad_AspNetUsers" FromRole="AspNetUsers" ToRole="Habilidad" />
           <NavigationProperty Name="Testimonio" Relationship="Self.FK_Testimonio_AspNetUsers" FromRole="AspNetUsers" ToRole="Testimonio" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+          <Property Name="Birthday" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Edad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Degree" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Aboutinfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Experiencia_Principal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Text_Experiencia_principal" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Datos" Relationship="portafolioModel.FK_Datos_AspNetUsers" FromRole="AspNetUsers" ToRole="Datos" />
+          <NavigationProperty Name="Servicios" Relationship="portafolioModel.FK_Servicios_AspNetUsers" FromRole="AspNetUsers" ToRole="Servicios" />
         </EntityType>
         <EntityType Name="Experiencia">
           <Key>
@@ -340,8 +410,9 @@
           <Property Name="id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UsuarioId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Dominio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_Habilidad_AspNetUsers" FromRole="Habilidad" ToRole="AspNetUsers" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Porcentaje" Type="Int32" />
         </EntityType>
         <EntityType Name="Testimonio">
           <Key>
@@ -480,7 +551,63 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Datos" EntityType="portafolioModel.Datos" />
+          <EntitySet Name="Servicios" EntityType="portafolioModel.Servicios" />
+          <AssociationSet Name="FK_Datos_AspNetUsers" Association="portafolioModel.FK_Datos_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Datos" EntitySet="Datos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Servicios_AspNetUsers" Association="portafolioModel.FK_Servicios_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Servicios" EntitySet="Servicios" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Datos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Clientes" Type="Int32" />
+          <Property Name="Texto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UsuarioId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion_Hecho" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="portafolioModel.FK_Datos_AspNetUsers" FromRole="Datos" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="Servicios">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UsuarioID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Servicio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion_Servicio" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="portafolioModel.FK_Servicios_AspNetUsers" FromRole="Servicios" ToRole="AspNetUsers" />
+        </EntityType>
+        <Association Name="FK_Datos_AspNetUsers">
+          <End Type="portafolioModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="portafolioModel.Datos" Role="Datos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Datos">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Servicios_AspNetUsers">
+          <End Type="portafolioModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="portafolioModel.Servicios" Role="Servicios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Servicios">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -517,6 +644,13 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="portafolioModel.AspNetUsers">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Text_Experiencia_principal" ColumnName="Text_Experiencia_principal" />
+                <ScalarProperty Name="Experiencia_Principal" ColumnName="Experiencia_Principal" />
+                <ScalarProperty Name="Aboutinfo" ColumnName="Aboutinfo" />
+                <ScalarProperty Name="Degree" ColumnName="Degree" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
@@ -558,10 +692,11 @@
           <EntitySetMapping Name="Habilidad">
             <EntityTypeMapping TypeName="portafolioModel.Habilidad">
               <MappingFragment StoreEntitySet="Habilidad">
+                <ScalarProperty Name="Porcentaje" ColumnName="Porcentaje" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="Dominio" ColumnName="Dominio" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -593,6 +728,28 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Datos">
+            <EntityTypeMapping TypeName="portafolioModel.Datos">
+              <MappingFragment StoreEntitySet="Datos">
+                <ScalarProperty Name="Descripcion_Hecho" ColumnName="Descripcion_Hecho" />
+                <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+                <ScalarProperty Name="Texto" ColumnName="Texto" />
+                <ScalarProperty Name="Clientes" ColumnName="Clientes" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servicios">
+            <EntityTypeMapping TypeName="portafolioModel.Servicios">
+              <MappingFragment StoreEntitySet="Servicios">
+                <ScalarProperty Name="Descripcion_Servicio" ColumnName="Descripcion_Servicio" />
+                <ScalarProperty Name="Servicio" ColumnName="Servicio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
